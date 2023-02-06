@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'allauth.account',
     'allauth.socialaccount',
     'dj_rest_auth.registration',
+    'drf_spectacular',
 
     #local apps
     'user.apps.UserConfig',
@@ -132,7 +133,8 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES':[
     'rest_framework.authentication.SessionAuthentication',
     'rest_framework.authentication.TokenAuthentication',
-    ]
+    ],
+    'DEFAULT_SCHEMA_CLASS':'drf_spectacular.openapi.AutoSchema',
 }
 REST_AUTH_SERIALIZERS = {
     'USER_DETAILS_SERIALIZER':'user.serializers.UserSerializer',
