@@ -10,6 +10,7 @@ psycopg2 = "*"
 dj-rest-auth = "*"
 django-allauth = "*"
 pillow = "*"
+drf-spectacular = "*"
 
 [dev-packages]
 

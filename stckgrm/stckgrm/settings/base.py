@@ -134,6 +134,9 @@ REST_FRAMEWORK = {
     'rest_framework.authentication.TokenAuthentication',
     ]
 }
+REST_AUTH_SERIALIZERS = {
+    'USER_DETAILS_SERIALIZER':'user.serializers.UserSerializer',
+}
 AUTH_USER_MODEL = 'user.User'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 SITE_ID = 1
