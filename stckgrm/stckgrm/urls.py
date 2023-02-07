@@ -17,11 +17,12 @@ from django.contrib import admin
 from django.urls import path,include
 from django.conf.urls.static import static
 from django.conf import settings
-from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
+from drf_spectacular.views import SpectacularAPIView,SpectacularSwaggerView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('api-auth/',include('rest_framework.urls')),
+    path('api/v1/post/',include('posts.urls')),
     path('api/v1/rest-auth/',include('dj_rest_auth.urls')),
     path('api/v1/rest-auth/registration/',include('dj_rest_auth.registration.urls')),
     path('api/schema/',SpectacularAPIView.as_view(),name = 'schema'),

@@ -11,6 +11,10 @@ dj-rest-auth = "*"
 django-allauth = "*"
 pillow = "*"
 drf-spectacular = "*"
+pytest = "*"
+pytest-factoryboy = "*"
+coverage = "*"
+pytest-cov = "*"
 
 [dev-packages]
 
