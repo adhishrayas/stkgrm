@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from rest_framework import generics
-from .permissions import IsAuthorOrReadOnly
+from stckgrm.permissions.permissions import IsAuthorOrReadOnly
 from .models import Question
 from user.models import User
 from .serializers import QuestionListSerializer,QuestionDetailsSerializer

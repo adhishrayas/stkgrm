@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'dj_rest_auth.registration',
     'drf_spectacular',
+    'phonenumber_field',
 
     #local apps
     'user.apps.UserConfig',
@@ -136,8 +137,8 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_SCHEMA_CLASS':'drf_spectacular.openapi.AutoSchema',
 }
-REST_AUTH_SERIALIZERS = {
-    'USER_DETAILS_SERIALIZER':'user.serializers.UserSerializer',
+REST_AUTH_REGISTER_SERIALIZERS = {
+    'REGISTER_SERIALIZER':'user.serializers.UserSerializer',
 }
 AUTH_USER_MODEL = 'user.User'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
