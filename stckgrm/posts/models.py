@@ -9,7 +9,7 @@ class Question(models.Model):
         editable=False,
         default=uuid.uuid4,
     )
-    author = models.OneToOneField(User,on_delete=models.CASCADE)
+    author = models.ForeignKey(User,on_delete=models.CASCADE)
     title = models.CharField(max_length=150,unique=True)
     body = models.TextField(max_length=250)
     Code_picture = models.ImageField(upload_to='questions/',blank=True)
