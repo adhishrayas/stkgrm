@@ -27,5 +27,5 @@ urlpatterns = [
     path('api/v1/rest-auth/registration/',include('dj_rest_auth.registration.urls')),
     path('api/schema/',SpectacularAPIView.as_view(),name = 'schema'),
     path('api/schema/docs/',SpectacularSwaggerView.as_view(url_name='schema')),
-    path('api/v1/userdetail',include('user.urls')),
+    path('api/v1/userdetail/',include('user.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

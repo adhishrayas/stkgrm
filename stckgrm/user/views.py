@@ -7,9 +7,17 @@ from stckgrm.permissions.permissions import IsAuthorOrReadOnly
 # Create your views here.
 
 
-class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
+class UserView(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     def get(self, request):
         serializer = UserSerializer(request.user)
         return Response(serializer.data)
+    
+class UserEditview(generics.RetrieveUpdateDestroyAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+    def get(self, request,pk):
+        serializer = UserSerializer(request.user)
+        return Response(serializer.data)
+        
