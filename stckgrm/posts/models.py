@@ -19,14 +19,25 @@ class Question(models.Model):
     def __str__(self):
         return self.title
     
+    def comments_total(self):
+        return Answers.objects.filter(post_id = self.id).count()
+    
+    def comments(self):
+        array = []
+        for comment in Answers.objects.filter(post_id = self.id):
+            c = {}
+            c['body'] = comment.answer
+            c['created_at'] = comment.Date_Added
+            c['creator'] = comment.author
+            c['code_pic'] = comment.Code_picture
+
+            array.append(c)
+        return array
+    
 
 
 class Answers(models.Model):
-    id = models.UUIDField(
-        primary_key = True,
-        editable=False,
-        default= uuid.uuid4
-    )
+    post = models.OneToOneField(Question,on_delete=models.CASCADE,primary_key=True)
     author = models.ForeignKey(User,on_delete = models.CASCADE)
     title = models.TextField(max_length=50)
     answer = models.TextField(max_length=200)
@@ -41,6 +52,8 @@ class Answers(models.Model):
     
     def children(self):
         return Answers.objects.filter(parent = self)
+    
+    
 class likes(models.Model):
     post = models.ForeignKey(Question,on_delete = models.CASCADE)
     author = models.ForeignKey(User,on_delete = models.CASCADE)

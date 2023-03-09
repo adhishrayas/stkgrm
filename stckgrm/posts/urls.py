@@ -4,6 +4,6 @@ from .views import QuestionDetailView,QuestionListView,CommentDetailsView,Commen
 urlpatterns = [
 path('',QuestionListView.as_view()),
 path('<uuid:pk>/',QuestionDetailView.as_view()),
-path('comments',CommentListView.as_view()),
-path('comments/<uuid:pk>/',CommentDetailsView.as_view()),
+path('<uuid:pk>/comments',CommentListView.as_view()),
+path('<uuid:pk>/comments/edit',CommentDetailsView.as_view()),
 ]

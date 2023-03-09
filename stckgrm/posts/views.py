@@ -6,16 +6,18 @@ from user.models import User
 from .serializers import QuestionListSerializer,QuestionDetailsSerializer,CommentSerializer,CommentDetailSerializer
 # Create your views here.
 
-class CommentDetailsView(generics.RetrieveAPIView):
+class CommentDetailsView(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = (IsAuthorOrReadOnly,)
     queryset = Answers.objects.all()
     serializer_class = CommentDetailSerializer
 
 class CommentListView(generics.ListCreateAPIView):
-    queryset = Answers.objects.all()
     serializer_class = CommentSerializer
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
- 
+    def get_queryset(self):
+        return Answers.objects.filter(title = self.post)
+    
 
 class QuestionListView(generics.ListCreateAPIView):
     queryset = Question.objects.all()
