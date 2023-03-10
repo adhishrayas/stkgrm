@@ -16,6 +16,7 @@ pytest-factoryboy = "*"
 coverage = "*"
 pytest-cov = "*"
 django-phonenumber-field = {extras = ["phonenumbers"], version = "*"}
+firebase-admin = "*"
 
 [dev-packages]
 

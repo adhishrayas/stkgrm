@@ -10,12 +10,11 @@ class QuestionListSerializer(serializers.ModelSerializer):
 class QuestionDetailsSerializer(serializers.ModelSerializer):
     author = serializers.ReadOnlyField(source = 'author.username')
     class Meta:
-        fields = ['author','id','title','body','Code_picture','comments_total']
+        fields = ['author','id','title','body','Code_picture','comments_total','comments']
         model = Question
 
 class CommentSerializer(serializers.ModelSerializer):
     author = serializers.ReadOnlyField(source ='author.username')
-    post = serializers.ReadOnlyField('post')
     class Meta:
         fields = [
            'post',
@@ -32,6 +31,7 @@ class CommentChildSerializer(serializers.ModelSerializer):
         fields = [
             'id',
             'parent',
+            'title',
             'author',
             'Date_Added',
         ]

@@ -28,16 +28,14 @@ class Question(models.Model):
             c = {}
             c['body'] = comment.answer
             c['created_at'] = comment.Date_Added
-            c['creator'] = comment.author
-            c['code_pic'] = comment.Code_picture
-
+            c['author'] = comment.author.username
             array.append(c)
         return array
     
 
 
 class Answers(models.Model):
-    post = models.OneToOneField(Question,on_delete=models.CASCADE,primary_key=True)
+    post = models.ForeignKey(Question,on_delete=models.CASCADE)
     author = models.ForeignKey(User,on_delete = models.CASCADE)
     title = models.TextField(max_length=50)
     answer = models.TextField(max_length=200)
@@ -46,12 +44,12 @@ class Answers(models.Model):
     is_parent = models.BooleanField(default=True)
     Date_Added = models.DateTimeField(auto_now_add=True)
     Date_updated = models.DateTimeField(auto_now = True)
-
     def __str__(self):
         return str(self.author) + 'comment' + str(self.answer)
     
     def children(self):
         return Answers.objects.filter(parent = self)
+    
     
     
 class likes(models.Model):

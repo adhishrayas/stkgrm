@@ -11,12 +11,12 @@ class CommentDetailsView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Answers.objects.all()
     serializer_class = CommentDetailSerializer
 
-class CommentListView(generics.ListCreateAPIView):
+class CommentCreateView(generics.ListCreateAPIView):
+    queryset = Answers.objects.all()
     serializer_class = CommentSerializer
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
-    def get_queryset(self):
-        return Answers.objects.filter(title = self.post)
+
     
 
 class QuestionListView(generics.ListCreateAPIView):
