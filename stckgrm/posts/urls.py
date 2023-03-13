@@ -1,9 +1,8 @@
-from django.urls import path,include
-from .views import QuestionDetailView,QuestionListView,CommentDetailsView,CommentCreateView
-# set urls for the posts app
+from django.urls import path
+from .views import ListCreatePost,UserPosts,PostDetails
+
 urlpatterns = [
-path('',QuestionListView.as_view()),
-path('<uuid:pk>/',QuestionDetailView.as_view()),
-path('<uuid:pk>/comments',CommentCreateView.as_view()),
-path('<uuid:pk>/comments/edit',CommentDetailsView.as_view()),
+    path('',ListCreatePost.as_view()),
+    path('<uuid:pk>/',PostDetails.as_view()),
+    path('UserPosts/',UserPosts.as_view()),
 ]

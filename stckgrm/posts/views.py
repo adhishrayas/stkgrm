@@ -1,33 +1,34 @@
+import permissions
 from django.shortcuts import render
 from rest_framework import generics
-from stckgrm.permissions.permissions import IsAuthorOrReadOnly
-from .models import Question,Answers
-from user.models import User
-from .serializers import QuestionListSerializer,QuestionDetailsSerializer,CommentSerializer,CommentDetailSerializer
+from .models import Posts
+from .serializers import PostSerializer,PostDetailSerializer
+from rest_framework.response import Response
+from rest_framework import filters
 # Create your views here.
 
-class CommentDetailsView(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = (IsAuthorOrReadOnly,)
-    queryset = Answers.objects.all()
-    serializer_class = CommentDetailSerializer
-
-class CommentCreateView(generics.ListCreateAPIView):
-    queryset = Answers.objects.all()
-    serializer_class = CommentSerializer
+class ListCreatePost(generics.ListCreateAPIView):
+    serializer_class = PostDetailSerializer
+    queryset = Posts.objects.all()
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['Author','Title','Tags']
     def perform_create(self, serializer):
-        serializer.save(author=self.request.user)
+        serializer.save(Author = self.request.user)
 
-    
+class PostDetails(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = (permissions.IsAuthorOrReadOnly,)
+    queryset = Posts.objects.all()
+    def retrieve(self, request,pk):
+        queryset = self.get_object()
+        serializer = PostDetailSerializer(queryset,many = False)
+        return Response(serializer.data)
 
-class QuestionListView(generics.ListCreateAPIView):
-    queryset = Question.objects.all()
-    serializer_class = QuestionListSerializer
+class UserPosts(generics.ListCreateAPIView):
+    serializer_class = PostSerializer
+    queryset = Posts.objects.all()
+    filter_backends = [filters.SearchFilter]
+    search_fields = ['Title','Tags']
     def perform_create(self, serializer):
-        serializer.save(author=self.request.user)
- 
-class QuestionDetailView(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = (IsAuthorOrReadOnly,)
-    queryset = Question.objects.all()
-    serializer_class = QuestionDetailsSerializer
-       
-
+        serializer.save(Author = self.request.user)
+    def get_queryset(self):
+        return Posts.objects.filter(Author_id = self.request.user.id)    

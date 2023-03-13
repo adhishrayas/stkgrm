@@ -1,53 +1,18 @@
 from rest_framework import serializers
-from .models import Question,Answers,likes
+from .models import Posts
+from taggit.serializers import (TagListSerializerField,
+                                TaggitSerializer)
 
-class QuestionListSerializer(serializers.ModelSerializer):
-    author = serializers.ReadOnlyField(source='author.username')
+class PostDetailSerializer(TaggitSerializer,serializers.ModelSerializer):
+    Author = serializers.ReadOnlyField(source = 'Author.Email')
+    Tags = TagListSerializerField()
     class Meta:
-        fields = ['author','id','title','body','Code_picture','comments_total']
-        model = Question
+        fields = ['id','Author','Title','Date_Added','Tags','Body','Code_Field','Error_Field','Tags']
+        model = Posts
 
-class QuestionDetailsSerializer(serializers.ModelSerializer):
-    author = serializers.ReadOnlyField(source = 'author.username')
+class PostSerializer(TaggitSerializer,serializers.ModelSerializer):
+    Author = serializers.ReadOnlyField(source = 'Author.Email')
+    Tags = TagListSerializerField()
     class Meta:
-        fields = ['author','id','title','body','Code_picture','comments_total','comments']
-        model = Question
-
-class CommentSerializer(serializers.ModelSerializer):
-    author = serializers.ReadOnlyField(source ='author.username')
-    class Meta:
-        fields = [
-           'post',
-           'author',
-           'title',
-           'Date_Added',
-           'Date_updated',
-        ]
-        model = Answers
-
-class CommentChildSerializer(serializers.ModelSerializer):
-    author = serializers.ReadOnlyField(source='author.username')
-    class Meta:
-        fields = [
-            'id',
-            'parent',
-            'title',
-            'author',
-            'Date_Added',
-        ]
-        model = Answers
-
-
-class CommentDetailSerializer(serializers.ModelSerializer):
-    author = serializers.ReadOnlyField(source = 'author.username')
-    class Meta:
-        fields = [
-             'post',
-             'author',
-             'title',
-             'answer',
-             'Code_picture',
-             'Date_Added',
-             'Date_updated',
-        ]
-        model = Answers
+        fields = ['id','Author','Title','Date_Added','Tags']
+        model = Posts

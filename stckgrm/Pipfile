@@ -17,6 +17,8 @@ coverage = "*"
 pytest-cov = "*"
 django-phonenumber-field = {extras = ["phonenumbers"], version = "*"}
 firebase-admin = "*"
+django-taggit = "*"
+django-filter = "*"
 
 [dev-packages]
 
