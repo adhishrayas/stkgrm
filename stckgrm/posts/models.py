@@ -31,6 +31,17 @@ class PostsManager(models.Manager):
         return post
 
 
+class CommentsManager(models.Manager):
+   def create_comments(self,Title,Body,**args)-> 'Comments':
+       if not Title:
+           raise ValueError('Title is necessary')
+       if not Body:
+           raise ValueError('Body is necessary')
+       comment = self.model(Title,Body,**args)
+       comment.save()
+       return comment
+    
+
 class Posts(models.Model):
     id = models.UUIDField(
         primary_key=True,
@@ -49,5 +60,36 @@ class Posts(models.Model):
 
     def __str__(self):
         return self.Title
+    
+    @property
+    def Com_m_ents(self):
+        array = []
+        for comment in Comments.objects.filter(post_id = self.id):
+            c = {}
+            c['Body'] = comment.Body
+            c['Title'] = comment.Title
+            c['Author']= comment.Author.username
+            c['Date_Added']= comment.Date_Added
+            array.append(c)
+        return array
+
+class Comments(models.Model):
+    id = models.UUIDField(
+        primary_key=True,
+        editable=False,
+        default=uuid.uuid4
+        )          
+    post = models.ForeignKey(Posts,on_delete=models.CASCADE)
+    Author = models.ForeignKey(User,on_delete=models.CASCADE)
+    Title = models.CharField(max_length=255,blank=False,null=True)
+    Body = models.TextField(max_length=255,blank=False,null=False)
+    Date_Added = models.DateTimeField(auto_now_add=True)
+    Date_Edited = models.DateTimeField(auto_now=True)
+    Correct_Code_Field = models.TextField(blank=True)
+    objects = CommentsManager()
+
+    def __str__(self):
+        return self.Title
+    
 
 
