@@ -9,7 +9,7 @@ from taggit.managers import TaggableManager
 
 class PostsManager(models.Manager):
     
-    def create_post(self,Title:str,Body:str,Code_Field:str,Error_Field:str,Tags:str)-> 'Posts':
+    def create_post(self,Title:str,Body:str,Code_Field:str,Error_Field:str,Tags:str,*args)-> 'Posts':
         if not Title:
             raise ValueError('Post must have a Title')
         if not Tags:
@@ -21,7 +21,7 @@ class PostsManager(models.Manager):
         if not Code_Field:
             raise Warning('Code Field will ensure a better understanding of your problem!')
         
-        post = self.model()
+        post = self.model(*args)
         post.Title = Title
         post.Body = Body
         post.Error_Field = Error_Field
@@ -32,12 +32,12 @@ class PostsManager(models.Manager):
 
 
 class CommentsManager(models.Manager):
-   def create_comments(self,Title,Body,**args)-> 'Comments':
+   def create_comments(self,Title,Body,*args)-> 'Comments':
        if not Title:
            raise ValueError('Title is necessary')
        if not Body:
            raise ValueError('Body is necessary')
-       comment = self.model(Title,Body,**args)
+       comment = self.model(Title,Body,*args)
        comment.save()
        return comment
     
@@ -55,6 +55,8 @@ class Posts(models.Model):
     Error_Field = models.TextField(blank=True)
     Date_Added = models.DateTimeField(auto_now_add=True)
     Date_Edited = models.DateTimeField(auto_now=True)
+    Upvoted = models.BooleanField(default=False)
+    DownVoted = models.BooleanField(default=False)
     Tags = TaggableManager()
     objects = PostsManager()
 
@@ -72,7 +74,19 @@ class Posts(models.Model):
             c['Date_Added']= comment.Date_Added
             array.append(c)
         return array
+    
+    @property
+    def totalcomments(self):
+        return  Comments.objects.filter(post_id = self.id).count()
+    
+    @property
+    def totalUpvotes(self):
+        return Upvotes.objects.filter(voted_object_id = self.id).count()
 
+    @property
+    def totalDownvotes(self):
+        return DownVotes.objects.filter(voted_object_id = self.id).count()
+    
 class Comments(models.Model):
     id = models.UUIDField(
         primary_key=True,
@@ -90,6 +104,45 @@ class Comments(models.Model):
 
     def __str__(self):
         return self.Title
+    
+    @property
+    def totalUpvotes(self):
+        return Upvotes_comments.objects.filter
+    
+class Upvotes(models.Model):
+
+    id = models.UUIDField(
+        primary_key=True,
+        editable=False,
+        default=uuid.uuid4,
+    )
+    Author = models.ForeignKey(User,on_delete=models.CASCADE)
+    voted_object = models.ForeignKey(Posts,on_delete=models.CASCADE)
+    Date_Added = models.DateTimeField(auto_now_add=True)
+    Date_Edited = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.Author
+
+class DownVotes(Upvotes):
+    pass
+
+class Upvotes_comments(models.Model):
+    id = models.UUIDField(
+        primary_key=True,
+        editable=False,
+        default=uuid.uuid4
+    )
+    Author = models.ForeignKey(User,on_delete=models.CASCADE)
+    voted_ob = models.ForeignKey(Comments,on_delete=models.CASCADE)
+    Date_Added = models.DateTimeField(auto_now_add=True)
+    Date_Edited = models.DateTimeField(auto_now=True)
+    
+    def __str__(self):
+        return self.Author
+class Downvote_comments(Upvotes_comments):
+    pass
+
     
 
 

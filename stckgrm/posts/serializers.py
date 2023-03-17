@@ -5,16 +5,17 @@ from taggit.serializers import (TagListSerializerField,
 
 class PostDetailSerializer(TaggitSerializer,serializers.ModelSerializer):
     Author = serializers.ReadOnlyField(source = 'Author.Email')
+    Upvote = serializers.BooleanField()
     Tags = TagListSerializerField()
     class Meta:
-        fields = ['id','Author','Title','Date_Added','Tags','Body','Code_Field','Error_Field','Tags','Com_m_ents']
+        fields = ['id','Author','Title','Date_Added','Tags','Body','Code_Field','Error_Field','Tags','Com_m_ents','Upvote']
         model = Posts
 
 class PostSerializer(TaggitSerializer,serializers.ModelSerializer):
     Author = serializers.ReadOnlyField(source = 'Author.Email')
     Tags = TagListSerializerField()
     class Meta:
-        fields = ['id','Author','Title','Date_Added','Tags']
+        fields = ['id','Author','Title','Date_Added','Tags','totalcomments','totalUpvotes',]
         model = Posts
 
 class CommentsSerializer(serializers.ModelSerializer):

@@ -1,14 +1,14 @@
 import permissions
 from django.shortcuts import render
 from rest_framework import generics,viewsets
-from .models import Posts,Comments
+from .models import Posts,Comments,Upvotes
 from .serializers import PostSerializer,PostDetailSerializer,CommentsSerializer
 from rest_framework.response import Response
 from rest_framework import filters
 # Create your views here.
 
 class ListCreatePost(generics.ListCreateAPIView):
-    serializer_class = PostDetailSerializer
+    serializer_class = PostSerializer
     queryset = Posts.objects.all()
     filter_backends = [filters.OrderingFilter,filters.SearchFilter]
     search_fields = ['Author','Title','Tags']#Search filter not working,throwing error of unknown fields even on searching through the right fields
@@ -24,6 +24,12 @@ class PostDetails(generics.RetrieveUpdateDestroyAPIView):
         queryset = self.get_object()
         serializer = PostDetailSerializer(queryset,many = False)
         return Response(serializer.data)
+    def perform_update(self, serializer):
+         author = self.request.user
+         if(Upvotes.objects.filter(Author = author)):
+            serializer.save(Upvote = False)
+         else:
+            serializer.save(Upvote = True,Upvotes_Author_id = author)
 
 class UserPosts(generics.ListCreateAPIView):
     serializer_class = PostSerializer
